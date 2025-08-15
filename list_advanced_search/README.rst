@@ -13,7 +13,6 @@ Configuration
 Company
 -------
 
-
 License
 -------
 Affero General Public License, v3.0 (AGPL v3).
@@ -33,13 +32,8 @@ Bug Tracker
 Bugs are tracked on GitHub Issues. In case of trouble, please check there if your issue has already been reported.
 
 Maintainer
-==========
-.. image:: https://cybrosys.com/images/logo.png
-   :target: https://cybrosys.com
-
-This module is maintained by Cybrosys Technologies.
-
-For support and more information, please visit `Our Website <https://cybrosys.com/>`__
+-----------
+For support and more information, please visit `charles.chang888888@gmail.com`__
 
 Further information
 ===================

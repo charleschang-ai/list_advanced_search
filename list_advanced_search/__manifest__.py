@@ -9,9 +9,9 @@
     'category': 'Extra Tools',
     'summary': """Advanced search feature in all list views""",
     'description': """It enhances user experience by enabling both single and 
-    multiple search capabilities across all tree view displays. It facilitates 
-    multiple search filters on single columns, allowing users to easily search 
-    through various data types such as text, date/datetime, many2one, integer, 
+     multiple search capabilities across all tree view displays. It facilitates 
+        multiple search filters on single columns, allowing users to easily search 
+            through various data types such as text, date/datetime, many2one, integer, 
     and float columns.""",
     'author': 'Charles',
     'maintainer': 'Charles',
