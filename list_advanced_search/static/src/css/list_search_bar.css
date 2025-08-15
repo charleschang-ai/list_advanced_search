@@ -148,3 +148,11 @@
 .boolean-filter:hover .fa-toggle-on {
     transform: scale(1.2);
 }
+
+
+.highlight-column {
+    background: linear-gradient(135deg, #00c3ff, #ffff1c);
+    color: #000;
+    font-weight: bold;
+    transition: background 0.3s ease, color 0.3s ease;
+}

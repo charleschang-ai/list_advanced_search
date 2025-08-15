@@ -9,6 +9,7 @@ patch(ListRenderer.prototype, {
         super.setup();
         this.domainMap = {};
         this.selectedItem = null
+        this.activeFields = new Set();
         this._debouncedSearch = debounce(this._triggerSearch.bind(this), 300); // 300ms debounce
     },
     // 靜態
@@ -28,17 +29,51 @@ patch(ListRenderer.prototype, {
     //     }
     //     return [[name, 'ilike', inputValue]];
     // },
+    _highlightColumn(fieldName) {
+        const headers = Array.from(document.querySelectorAll('thead th'));
+        const index = headers.findIndex(th => th.dataset.name === fieldName);
+        if (index === -1) return;
+
+        headers[index].classList.add('highlight-column');
+
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells[index]) {
+                cells[index].classList.add('highlight-column');
+            }
+        });
+    },
+    _unhighlightColumn(fieldName) {
+        const headers = Array.from(document.querySelectorAll('thead th'));
+        const index = headers.findIndex(th => th.dataset.name === fieldName);
+        if (index === -1) return;
+
+        headers[index].classList.remove('highlight-column');
+
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells[index]) {
+                cells[index].classList.remove('highlight-column');
+            }
+        });
+    },
 
     //動態
     _updateDomain(name, domain) {
         if (domain.length === 0) {
             delete this.domainMap[name];
+             this.activeFields.delete(name);
+             this._unhighlightColumn(name);
         } else {
             this.domainMap[name] = domain;
+            this.activeFields.add(name);
+            this._highlightColumn(name);
         }
 
         const combinedDomain = Object.values(this.domainMap).flat();
-        this.env.searchModel.clearQuery();
+        // this.env.searchModel.clearQuery();
         this.env.searchModel.splitAndAddDomain(combinedDomain);
     },
 
@@ -47,7 +82,7 @@ patch(ListRenderer.prototype, {
         // if (((this.domain).length == 0) && (this.__owl__.parent.parent.props.domain[0] != null)) {
         //     this.domain = this.__owl__.parent.parent.props.domain;
         // }
-        this.env.searchModel.clearQuery();
+        // this.env.searchModel.clearQuery();
         this.domain = Domain;
         this.env.searchModel.splitAndAddDomain(Domain);
     },
