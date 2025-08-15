@@ -8,12 +8,10 @@
     'version': '18.0.1.0.0',
     'category': 'Extra Tools',
     'summary': """Advanced search feature in all list views""",
-    'description': """It enhances user experience by enabling both single and 
-    multiple search capabilities across all tree view displays. It facilitates 
-    multiple search filters on single columns, allowing users to easily search 
-    through various data types such as text, date/datetime, many2one, integer, 
-    and float columns.""",
-    'author': 'Charles',
+    'description': """1. Enhanced field-based search capabilities, supporting common fields such as text, date/datetime, many2one, integer, boolean, and float columns.
+2. Dynamic, instant search. Results appear as you type. No need to click confirm.
+3. Highlighting. After searching, the column will be highlighted for easy viewing.""",
+    'author': 'Charles Chang',
     'maintainer': 'Charles',
     'depends': ['web', 'purchase', 'account'],
     'assets': {
