@@ -25,9 +25,11 @@
             'list_advanced_search/static/src/xml/list_render_search_bar.xml',
         ],
     },
-    'images': ['static/description/banner.jpg'],
+    'images': ['static/description/icon.png'],
     'license': 'AGPL-3',
     'installable': True,
     'auto_install': False,
     'application': False,
+    'price': 5,
+    'currency': "USD",
 }
