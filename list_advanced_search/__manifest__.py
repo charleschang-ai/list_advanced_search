@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ################################################################################
-#    Author: Charles
+#    Author: Don Shan
 #
 ################################################################################
 {
@@ -11,8 +11,8 @@
     'description': """1. Enhanced field-based search capabilities, supporting common fields such as text, date/datetime, many2one, integer, boolean, and float columns.
 2. Dynamic, instant search. Results appear as you type. No need to click confirm.
 3. Highlighting. After searching, the column will be highlighted for easy viewing.""",
-    'author': 'Charles Chang',
-    'maintainer': 'Charles',
+    'author': 'Don Shan',
+    'maintainer': 'Don Shan',
     'depends': ['web', 'purchase', 'account'],
     'assets': {
         'web.assets_backend': [
