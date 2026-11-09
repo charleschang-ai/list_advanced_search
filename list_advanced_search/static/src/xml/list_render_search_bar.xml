@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<templates>
-    <t t-name="ListRendererSearchInherit" t-inherit="web.ListRenderer" t-inherit-mode="extension">
-        <xpath expr="//div[hasclass('o_list_renderer')]//table[@t-ref='table']/thead/tr" position="after">
-            <tr>
-                <th/>
-                <t t-foreach="columns" t-as="column" t-key="column.id">
-                    <t t-set="field_data" t-value="this.env.model.config.fields[column.name]"/>
-                    <th t-if="column.type === 'field' and field_data?.sortable">
-                        <t t-if="column.field.supportedTypes">
-                            <t t-if="column.widget !== 'badge' and !column.field.supportedTypes.includes('date') and !column.field.supportedTypes.includes('datetime') and !column.field.supportedTypes.includes('boolean')">
-                                <div class="search-input" t-att-id="column.name + 'Container'">
-                                    <!--                                    <div style="display: flex;">-->
-                                    <input type="text" t-att-id="column.name + 'Input'" class="input_data"
-                                           t-on-input="(ev) => this._onInput(ev, column.name)"
-                                           t-att-placeholder="column.label"/>
-                                    <i class="fa fa-search" t-on-click="(ev) => this._onClick_search(ev, column.name)"/>
-                                    <!--                                    </div>-->
-                                </div>
-                            </t>
-                            <t t-if="column.field.supportedTypes.includes('date') || column.field.supportedTypes.includes('datetime')">
-                                <DateRange onFromToChanged="(value) => this.changeDate(column.name, value)"/>
-                            </t>
-                        </t>
-                        <t t-if="column.widget === 'badge' and field_data.type == 'selection'">
-                            <Dropdown class="'btn-group dp-class'" togglerClass="'btn btn-secondary'" showCaret="true"
-                                      listRendererClass="uniqueRendererClass">
-                                <t t-set-slot="toggler">
-                                    <span class="fa fa-filter" style="margin-right: 10px;"/>
-                                    <t t-out="column.label"/>
-                                </t>
-                                <t t-if="field_data.selection" t-foreach="field_data.selection" t-as="selection"
-                                   t-key="selection_index">
-                                    <DropdownItem parentClosingMode="'none'"
-                                                  onSelected="() => this.changeStateSelection(column.name, selection[0])">
-                                        <span t-esc="selection[1]"/>
-                                        <i class="fa fa-check" t-if="selection[0] === selectedItem"
-                                           style="margin-left: 7px; color: black;"/>
-                                    </DropdownItem>
-                                </t>
-                            </Dropdown>
-                        </t>
-                        <t t-if="column.field.supportedTypes.includes('boolean')">
-                            <div class="boolean-filter" t-att-id="column.name + 'Container'">
-                                <select class="boolean-select"
-                                        t-on-change="(ev) => this.onBooleanChanged(ev, column.name)">
-                                    <option value="">All</option>
-                                    <option value="true">True</option>
-                                    <option value="false">False</option>
-                                </select>
-                                <i class="fa fa-toggle-on"/>
+<templates xml:space="preserve">
+    <!-- Called right after the header row of "web.ListRenderer" (see the template processor
+         in list_render_search_bar.js). <td> (not <th>) on purpose: the column width hook of
+         the list renderer measures every "thead th". -->
+    <t t-name="list_advanced_search.FilterRow">
+            <tr t-if="this.advSearchEnabled" class="o_list_advanced_search_row">
+                <td t-if="this.hasSelectors"/>
+                <t t-foreach="this.columns" t-as="column" t-key="column.id">
+                    <t t-set="advType" t-value="this.getAdvSearchType(column)"/>
+                    <td t-att-class="{'o_las_cell': advType, 'o_las_highlight': advType and this.advState.filters[column.name]}">
+                        <t t-if="advType">
+                        <!-- single-item loop: bumping the key remounts (= clears) the widget -->
+                        <t t-foreach="[this.advResetKey(column.name)]" t-as="advKey" t-key="advKey">
+                            <div t-if="advType === 'text' or advType === 'number'" class="o_las_input">
+                                <input type="text" class="o_las_input_data"
+                                       t-att-name="column.name"
+                                       t-att-value="this.advFilterValue(column.name) or ''"
+                                       t-att-placeholder="column.label"
+                                       t-att-title="advType === 'number' ? 'Contains, or use an operator: &gt;100, &gt;=100, &lt;100, &lt;=100, =100, !=100' : 'Contains'"
+                                       autocomplete="off"
+                                       t-on-input="(ev) => this.onAdvTextInput(ev, column)"
+                                       t-on-compositionend="(ev) => this.onAdvTextInput(ev, column)"
+                                       t-on-keydown="(ev) => this.onAdvTextKeydown(ev, column)"/>
+                                <i class="oi o_las_icon" data-icon="search" role="button" title="Search"
+                                   t-on-click="(ev) => this.onAdvSearchIconClick(ev, column)"/>
                             </div>
+                            <t t-elif="advType === 'date'"
+                               t-component="this.advDateRangeComponent"
+                               from="this.advDateValue(column.name, 'from')"
+                               to="this.advDateValue(column.name, 'to')"
+                               onChange="(value) => this.onAdvDateChanged(column, value)"/>
+                            <div t-elif="advType === 'boolean'" class="o_las_boolean">
+                                <select class="o_las_boolean_select" t-on-change="(ev) => this.onAdvBooleanChanged(ev, column)">
+                                    <option value="" t-att-selected="!this.advFilterValue(column.name)">All</option>
+                                    <option value="true" t-att-selected="this.advFilterValue(column.name) === 'true'">Yes</option>
+                                    <option value="false" t-att-selected="this.advFilterValue(column.name) === 'false'">No</option>
+                                </select>
+                                <i class="oi o_las_icon" data-icon="arrow_drop_down"/>
+                            </div>
+                            <t t-elif="advType === 'selection'" t-component="this.advDropdownComponent">
+                                <button class="btn o_las_selection_toggler" t-att-title="column.label">
+                                    <i class="oi me-1" data-icon="filter_alt"/>
+                                    <span class="text-truncate" t-out="this.advSelectionLabel(column)"/>
+                                    <i class="oi ms-auto ps-1" data-icon="arrow_drop_down"/>
+                                </button>
+                                <t t-set-slot="content">
+                                    <t t-foreach="this.props.list.fields[column.name].selection" t-as="option" t-key="option[0]">
+                                        <t t-component="this.advDropdownItemComponent"
+                                           onSelected="() => this.onAdvSelectionSelected(column, option[0], option[1])">
+                                            <i class="oi me-1" data-icon="check" t-att-style="option[0] === this.advFilterValue(column.name) ? '' : 'visibility: hidden'"/>
+                                            <span t-out="option[1]"/>
+                                        </t>
+                                    </t>
+                                </t>
+                            </t>
                         </t>
-
-                    </th>
-                    <th t-else="">
-                        <div/>
-                    </th>
+                        </t>
+                    </td>
                 </t>
-                <th/>
+                <td t-if="this.hasOpenFormViewColumn"/>
+                <td t-if="this.hasActionsColumn"/>
             </tr>
-        </xpath>
     </t>
-
 </templates>

@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<templates>
-    <t t-name="DateRange">
-        <div style=" display: flex;">
-            <div class="date-input">
+<templates xml:space="preserve">
+    <t t-name="list_advanced_search.DateRange">
+        <div class="o_las_date_range_container">
+        <div class="o_las_date_range">
+            <div class="o_las_date_input">
                 <DateTimeInput
-                    value="dateFrom"
+                    value="this.state.from"
                     type="'date'"
-                    placeholder="fromPlaceholder"
-                    onChange.bind="onDateFromChanged"
+                    placeholder="this.fromPlaceholder"
+                    onChange.bind="this.onDateFromChanged"
                 />
             </div>
-            <div class="arrow">
-                <i class="oi oi-arrow-right"/>
+            <div class="o_las_arrow">
+                <i class="oi" data-icon="arrow_forward"/>
             </div>
-            <div class="date-input">
+            <div class="o_las_date_input">
                 <DateTimeInput
-                    value="dateTo"
+                    value="this.state.to"
                     type="'date'"
-                    placeholder="toPlaceholder"
-                    onChange.bind="onDateToChanged"
+                    placeholder="this.toPlaceholder"
+                    onChange.bind="this.onDateToChanged"
                 />
             </div>
+        </div>
         </div>
     </t>
 </templates>
