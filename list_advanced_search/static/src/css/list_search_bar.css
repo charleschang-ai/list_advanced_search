@@ -1,158 +1,179 @@
-.search-input {
+/*
+ * Every selector is scoped to the filter row so that the module does not restyle
+ * generic classes (.fa-search, .arrow, ...) elsewhere in the web client.
+ */
+.o_list_advanced_search_row > td {
+    padding: 4px 3px;
+    vertical-align: middle;
+    background-color: var(--body-bg, #fff);
+    border-bottom-width: 1px;
+}
+
+.o_list_advanced_search_row .o_las_input,
+.o_list_advanced_search_row .o_las_date_input,
+.o_list_advanced_search_row .o_las_boolean,
+.o_list_advanced_search_row .o_las_selection_toggler {
     display: flex;
     align-items: center;
-    padding: 5px;
+    height: 32px;
+    min-width: 0;
     border-radius: 8px;
     background: linear-gradient(135deg, #2c3e50, #4ca1af);
-    backdrop-filter: blur(4px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    width: 100%;
-    height: 36px;
-    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    color: #fff;
     transition: box-shadow 0.3s ease, background 0.3s ease;
 }
 
-.search-input:hover {
+.o_list_advanced_search_row .o_las_input:hover,
+.o_list_advanced_search_row .o_las_date_input:hover,
+.o_list_advanced_search_row .o_las_boolean:hover,
+.o_list_advanced_search_row .o_las_selection_toggler:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     background: linear-gradient(135deg, #34495e, #5dade2);
 }
 
-.input_data {
-    flex: 1;
+/* text / number */
+.o_list_advanced_search_row .o_las_input {
+    width: 100%;
+    padding: 0 8px;
+}
+
+.o_list_advanced_search_row .o_las_input_data {
+    flex: 1 1 auto;
+    min-width: 0;
     border: none;
     outline: none;
-    padding: 5px;
-    font-size: 15px;
+    padding: 2px 4px;
+    font-size: 14px;
+    font-weight: 500;
     background-color: transparent;
     color: #fff;
-    font-weight: 500;
 }
 
-.input_data::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+.o_list_advanced_search_row .o_las_input_data::placeholder,
+.o_list_advanced_search_row .o_las_date_input input::placeholder {
+    color: rgba(255, 255, 255, 0.65);
     font-style: italic;
+    font-weight: 300;
 }
 
-.input_data:focus {
+.o_list_advanced_search_row .o_las_input_data:focus {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.fa-search {
-    margin-left: 8px;
-    font-size: 16px;
-    color: #ffffff;
+.o_list_advanced_search_row .o_las_icon {
+    margin-left: 6px;
+    font-size: 15px;
+    color: #fff;
     cursor: pointer;
     transition: transform 0.2s ease, color 0.3s ease;
 }
 
-.fa-search:hover {
+.o_list_advanced_search_row .o_las_icon:hover {
     transform: scale(1.2);
     color: #00e0ff;
 }
 
-/*date range*/
-.date-input {
+/* date range */
+/* table cells cannot be size containers, hence the extra wrapper */
+.o_list_advanced_search_row .o_las_date_range_container {
+    container-type: inline-size;
+    width: 100%;
+}
+
+.o_list_advanced_search_row .o_las_date_range {
     display: flex;
     align-items: center;
-    justify-content: center;
-    height: 36px;
-    padding: 0 14px;
-    margin-left: 6px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #2c3e50, #4ca1af);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: box-shadow 0.3s ease, background 0.3s ease;
-    font-size: 15px;
-    color: #fff;
+    gap: 4px;
 }
 
-.date-input:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(135deg, #34495e, #5dade2);
+.o_list_advanced_search_row .o_las_date_input {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 6px;
 }
 
-.date-input input {
+/* narrow column (e.g. "Invoice Date"): stack "from" above "to" */
+@container (max-width: 150px) {
+    .o_list_advanced_search_row .o_las_date_range {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .o_list_advanced_search_row .o_las_date_input {
+        flex: 0 0 auto;
+    }
+    .o_list_advanced_search_row .o_las_arrow {
+        display: none;
+    }
+}
+
+.o_list_advanced_search_row .o_las_date_input input {
+    width: 100%;
+    min-width: 0;
     background: transparent;
     border: none;
     outline: none;
-    font-size: 15px;
+    font-size: 14px;
     color: #fff;
-    width: 100%;
     text-align: center;
 }
 
-.date-input input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-    font-style: italic;
-    font-weight: 300;
-    font-style: italic;
+.o_list_advanced_search_row .o_las_arrow {
+    flex: 0 0 auto;
+    font-size: 15px;
+    color: #4ca1af;
 }
 
-.arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 8px;
-    font-size: 18px;
-    color: #00e0ff;
-    transform: translateY(-2px);
-}
-.boolean-filter {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px 10px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #2c3e50, #4ca1af);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    height: 36px;
+/* boolean */
+.o_list_advanced_search_row .o_las_boolean {
     width: 100%;
-    color: #fff;
-    transition: box-shadow 0.3s ease, background 0.3s ease;
+    padding: 0 8px;
 }
 
-.boolean-filter:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(135deg, #34495e, #5dade2);
-}
-
-.boolean-select {
+.o_list_advanced_search_row .o_las_boolean_select {
+    flex: 1 1 auto;
+    min-width: 0;
     background: transparent;
     border: none;
     outline: none;
     color: #fff;
     font-size: 14px;
     font-weight: 500;
-    width: 100%;
     appearance: none;
     cursor: pointer;
 }
 
-.boolean-select option {
+.o_list_advanced_search_row .o_las_boolean_select option {
     background-color: #2c3e50;
     color: #fff;
 }
 
-.boolean-filter .fa-toggle-on {
-    margin-left: 8px;
-    font-size: 16px;
+.o_list_advanced_search_row .o_las_boolean .o_las_icon {
     color: #00e0ff;
-    transition: transform 0.2s ease;
 }
 
-.boolean-filter:hover .fa-toggle-on {
-    transform: scale(1.2);
+/* selection */
+.o_list_advanced_search_row .o_las_selection_toggler {
+    width: 100%;
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: 500;
 }
 
+.o_list_advanced_search_row .o_las_selection_toggler:focus {
+    color: #fff;
+}
 
-.highlight-column {
-    background: linear-gradient(135deg, #00c3ff, #ffff1c);
-    color: #000;
+/* highlight of the filtered columns (header, filter cell and data cells) */
+.o_list_renderer .o_list_table .o_las_highlight {
+    --table-bg: transparent;
+    --bs-table-bg: transparent;
+    background-color: rgba(0, 195, 255, 0.16) !important;
+    box-shadow: none;
     font-weight: bold;
-    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.o_list_renderer .o_list_table thead th.o_las_highlight {
+    background-color: rgba(0, 195, 255, 0.3) !important;
 }
